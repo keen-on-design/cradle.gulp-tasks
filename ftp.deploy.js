@@ -6,7 +6,7 @@ module.exports = function() {
 
     $.gulp.task('ftp.deploy', function() {
         return $.gulp.src($.config.app.deploy.ftp.files, $.config.app.deploy.ftp.config)
-            .pipe( conn.newer($.config.app.deploy.ftp.dest) )
+            .pipe( conn.newerOrDifferentSize($.config.app.deploy.ftp.dest) )
             .pipe( conn.dest($.config.app.deploy.ftp.dest) );
     });
 };
