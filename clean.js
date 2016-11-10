@@ -1,8 +1,18 @@
 'use strict';
 
-//Clear build folder
-module.exports = function() {
-    $.gulp.task('clean', function(cb) {
-        return $.rimraf($.config.dest, cb);
-    });
+module.exports = function () {
+
+  //Cleans development folder
+  $.gulp.task('clean:dev', function (cb) {
+    return $.del([
+      $.config.destDev
+    ], cb);
+  });
+
+  //Cleans release folder
+  $.gulp.task('clean:release', function (cb) {
+    return $.del([
+      $.config.destRls
+    ], cb);
+  });
 };
