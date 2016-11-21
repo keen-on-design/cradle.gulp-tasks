@@ -1,12 +1,11 @@
 'use strict';
 
-module.exports = function () {
-
+module.exports = function (cb) {
   //Cleans development folder
-  $.gulp.task('clean:dev', function (cb) {
+  $.gulp.task('clean:dev', function () {
     return $.del([
-      $.config.destDev
-    ], cb);
+        $.config.destDev
+      ], cb);
   });
 
   //Cleans release folder
