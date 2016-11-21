@@ -2,7 +2,7 @@
 
 module.exports = function () {
   $.gulp.task('watch', function () {
-    $.gulp.watch($.config.js.location, $.gulp.series('js:process'));
+    $.gulp.watch($.config.js.location, $.gulp.series('js:app'));
     $.gulp.watch($.config.sass.location, $.gulp.series('sass:process'));
     $.gulp.watch($.config.pug.location, $.gulp.series('pug:process'));
     $.gulp.watch($.config.fonts.location, $.gulp.series('fonts'));
