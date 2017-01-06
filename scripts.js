@@ -1,55 +1,61 @@
 'use strict';
 
-var browserify = require('browserify'),
+var gulp       = require('gulp'),
+  gutil        = require('gulp-util'),
+  rename       = require('gulp-rename'),
+  browserify   = require('browserify'),
+  uglify       = require('gulp-uglify'),
   source       = require('vinyl-source-stream'),
   buffer       = require('vinyl-buffer'),
+  plumber      = require('gulp-plumber'),
   sourcemaps   = require('gulp-sourcemaps'),
-  gutil        = require('gulp-util'),
+  _            = require('underscore'),
 
-  //Get global config
-  config       = $.config.js,
-  vendors      = config.bundle.vendors;
+  // Default config
+  defaults     = {
+    location    : './src/js/**/*.js',
+    entryPoint  : './src/js/main.js',
+    destination : {
+      production  : './build/js',
+      development : './build/js'
+    },
+    output     : 'main.js',
+    browserify : {},
+    sourcemaps : {loadMaps: true}
+  };
 
-module.exports = function() {
+/**
+ * Creates a scripts task
+ * @param {String} [id=js:scripts] Id of a task
+ * @param {Object} [config={}] Task config
+ * @return {Stream}
+ */
+module.exports = function (id, config) {
+  var wizard = require('./utils/c.wizard')(id, 'js:scripts', config, defaults),
+    vendors = _.keys($.package.dependencies);
 
-  //Build vendors to separate package
-  $.gulp.task('js:bundle', function() {
-    var b = browserify({
-      debug: !$.releaseFlag
-    });
-
-    vendors.forEach(function(lib) {
-      b.require(lib);
-    });
-
-    return b.bundle()
-      .pipe($.plugins.plumber())
-      .pipe(source(config.bundle.result))
-      .pipe(buffer())
-      .pipe($.releaseFlag ? gutil.noop() : sourcemaps.init({loadMaps: true}))
-      .pipe($.releaseFlag ? $.plugins.uglify() : gutil.noop())
-      .pipe($.releaseFlag ? gutil.noop() : sourcemaps.write('./'))
-      .pipe($.releaseFlag ? $.gulp.dest(config.destinationRls) : $.gulp.dest(config.destinationDev));
-  });
+  id     = wizard.getId();
+  config = wizard.getConfig();
 
   //Build app
-  $.gulp.task('js:app', function() {
-    var b = browserify({
+  gulp.task(id, function () {
+    var bundler = browserify(_.extend({
       entries : config.entryPoint,
-      debug   : !$.releaseFlag
+      debug   : $.env.debug
+    }, config.browserify));
+
+    _.each(vendors, function (vendor) {
+      bundler.external(vendor);
     });
 
-    vendors.forEach(function(lib) {
-      b.external(lib);
-    });
-
-    return b.bundle()
-      .pipe($.plugins.plumber())
-      .pipe(source(config.app.result))
+    return bundler.bundle()
+      .pipe(plumber())
+      .pipe(source(config.output))
       .pipe(buffer())
-      .pipe($.releaseFlag ? gutil.noop() : sourcemaps.init({loadMaps: true}))
-      .pipe($.releaseFlag ? $.plugins.uglify() : gutil.noop())
-      .pipe($.releaseFlag ? gutil.noop() : sourcemaps.write('./'))
-      .pipe($.releaseFlag ? $.gulp.dest(config.destinationRls) : $.gulp.dest(config.destinationDev));
+      .pipe($.env.production ? gutil.noop() : sourcemaps.init(config.sourcemaps))
+      .pipe($.env.production ? uglify() : gutil.noop())
+      .pipe($.env.production ? rename({suffix : '.min'}) : gutil.noop())
+      .pipe($.env.production ? gutil.noop() : sourcemaps.write('./'))
+      .pipe($.env.production ? gulp.dest(config.destination.production) : gulp.dest(config.destination.development));
   });
 };
