@@ -1,22 +1,24 @@
 'use strict';
 
-var gutil      = require('gulp-util'),
-  log          = require('./c.log'),
-  _            = require('underscore');
-
 module.exports = function (id, defaultId, config, defaultConfig) {
+  let log = require('./c.log');
+  let _ = require('underscore');
 
+  /**
+   * Cradle task wizard object. Helps to init tasks
+   * @constructor
+   */
   function TaskWizard() {
     log([
-      {trace : 'Setting up task'},
-      {type  : 'id', trace : (id !== undefined) ? id : defaultId}
+      {trace: 'Setting up task'},
+      {type: 'id', trace: (id !== undefined) ? id : defaultId}
     ]);
 
     if (typeof id === 'undefined') {
       log([
-        {type  : 'warning', trace : 'No task ID provided.'},
-        {trace : 'Default ID is:'},
-        {type  : 'id', trace : defaultId}
+        {type: 'warning', trace: 'No task ID provided.'},
+        {trace: 'Default ID is:'},
+        {type: 'id', trace: defaultId}
       ]);
 
       this.id = defaultId;
@@ -26,8 +28,8 @@ module.exports = function (id, defaultId, config, defaultConfig) {
 
     if (typeof config === 'undefined' || typeof config !== 'object') {
       log([
-        {type  : 'warning', trace : 'No task config provided.'},
-        {trace : 'Task will execute with default configs'}
+        {type: 'warning', trace: 'No task config provided.'},
+        {trace: 'Task will execute with default configs'}
       ]);
       this.config = {};
     } else {
@@ -37,9 +39,9 @@ module.exports = function (id, defaultId, config, defaultConfig) {
     this.config = _.extend(defaultConfig, config);
 
     log([
-      {type  : 'success', trace : 'Setup complete.'},
-      {trace : 'Using config:'},
-      {type  : 'object', trace : this.config}
+      {type: 'success', trace: 'Setup complete.'},
+      {trace: 'Using config:'},
+      {type: 'object', trace: this.config}
     ]);
   }
 
