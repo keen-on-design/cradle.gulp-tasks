@@ -1,18 +1,41 @@
 'use strict';
 
-module.exports = function () {
+/**
+ * Image processor task. Relocate and minimise images
+ * @param {String} [id=clean] Id of a task
+ * @param {Object} [config={}] Task config
+ */
+module.exports = function (id, config) {
+  // Default config
+  let defaultId = 'images';
+  let defaults = {
+    location: './src/images/**/*',
+    destination: {
+      production: './build/images',
+      development: './build/images'
+    },
+    imagemin: {
+      optimizationLevel: 5,
+      progressive: true,
+      interlaced: true
+    }
+  };
 
-  //Optimize and move images to destination folder
-  $.gulp.task('images:process', function () {
-    return $.gulp.src($.config.images.location)
-      .pipe($.plugins.if($.argv.release,
-        $.plugins.cache($.plugins.imagemin($.config.images.config.imagemin))
-      ))
-      .pipe($.plugins.if($.argv.release === undefined,
-        $.gulp.dest($.config.images.destinationDev)
-      ))
-      .pipe($.plugins.if($.argv.release,
-        $.gulp.dest($.config.images.destinationRls)
-      ));
+  // Init task with cradle wizard
+  let wizard = require('./utils/c.wizard')(id, defaultId, config, defaults);
+
+  // Task dependencies
+  let gulp = require('gulp');
+  let gutil = require('gulp-util');
+  let cache = require('gulp-cache');
+  let imagemin = require('gulp-imagemin');
+
+  // Final task config
+  config = wizard.getConfig();
+
+  gulp.task(wizard.getId(), function () {
+    return gulp.src(config.location)
+      .pipe($.env.production ? cache(imagemin(config.imagemin)) : gutil.noop())
+      .pipe($.env.production ? gulp.dest(config.destination.production) : gulp.dest(config.destination.development));
   });
 };
