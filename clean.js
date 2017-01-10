@@ -1,28 +1,28 @@
 'use strict';
-var gulp = require('gulp'),
-  del    = require('del'),
-  wizard = require('./utils/c.wizard'),
-
-  // Default config
-  defaults     = {
-    destination : './build/js'
-  };
 
 /**
  * Creates a directory cleaner task
  * @param {String} [id=clean] Id of a task
  * @param {Object} [config={}] Task config
- * @return {Function}
  */
 module.exports = function (id, config) {
-  var wizard = require('./utils/c.wizard')(id, 'clean', config, defaults);
+  // Default config
+  let defaultId = 'clean';
+  let defaults = {
+    destination: './build/js'
+  };
 
-  id     = wizard.getId();
+  // Init task with cradle wizard
+  let wizard = require('./utils/c.wizard')(id, defaultId, config, defaults);
+
+  // Task dependencies
+  let gulp = require('gulp');
+  let del = require('del');
+
+  // Final task config
   config = wizard.getConfig();
 
-  gulp.task(id, function (cb) {
-    return del([
-        config.destination
-      ], cb);
+  gulp.task(wizard.getId(), function (cb) {
+    return del([config.destination], cb);
   });
 };
