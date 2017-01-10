@@ -6,45 +6,42 @@
  * @param {Object} [config={}] Task config
  */
 module.exports = function (id, config) {
-  let
-    // Default config
-    defaultId = 'js:bundle',
-    defaults = {
-      entryPoint: './src/js/app.js',
-      destination: {
-        production:  './build/js',
-        development: './build/js',
-      },
-      browserify: { },
-      sourcemaps: {loadMaps: true},
-      output: 'bundle.js',
+  // Default config
+  let defaultId = 'js:bundle';
+  let defaults = {
+    entryPoint: './src/js/app.js',
+    destination: {
+      production: './build/js',
+      development: './build/js'
     },
-    // Init task with cradle wizard
-    wizard = require('./utils/c.wizard')(id, defaultId, config, defaults),
-    // Task dependencies
-    gulp = require('gulp'),
-    gutil = require('gulp-util'),
-    rename = require('gulp-rename'),
-    browserify = require('browserify'),
-    uglify = require('gulp-uglify'),
-    source = require('vinyl-source-stream'),
-    buffer = require('vinyl-buffer'),
-    plumber = require('gulp-plumber'),
-    sourcemaps = require('gulp-sourcemaps'),
-    _ = require('underscore'),
-    vendors,
-    bundler;
-  vendors = _.keys($.package.dependencies);
+    browserify: { },
+    sourcemaps: {loadMaps: true},
+    output: 'bundle.js',
+    vendors: []
+  };
 
-  id     = wizard.getId();
+  // Init task with cradle wizard
+  let wizard = require('./utils/c.wizard')(id, defaultId, config, defaults);
+
+  // Task dependencies
+  let gulp = require('gulp');
+  let gutil = require('gulp-util');
+  let rename = require('gulp-rename');
+  let browserify = require('browserify');
+  let uglify = require('gulp-uglify');
+  let source = require('vinyl-source-stream');
+  let buffer = require('vinyl-buffer');
+  let plumber = require('gulp-plumber');
+  let sourcemaps = require('gulp-sourcemaps');
+  let _ = require('underscore');
+
+  // Final task config
   config = wizard.getConfig();
 
-  gulp.task(id, function () {
-    bundler = browserify(_.extend({
-      debug: $.env.debug
-    }, config.browserify));
+  gulp.task(wizard.getId(), function () {
+    let bundler = browserify(_.extend({debug: $.env.debug}, config.browserify));
 
-    _.each(vendors, function (vendor) {
+    _.each(config.vendors, function (vendor) {
       bundler.require(vendor);
     });
 
@@ -56,6 +53,6 @@ module.exports = function (id, config) {
       .pipe($.env.production ? uglify() : gutil.noop())
       .pipe($.env.production ? rename({suffix: '.min'}) : gutil.noop())
       .pipe($.env.production ? gutil.noop() : sourcemaps.write('./'))
-      .pipe($.env.production ? gulp.dest(config.destination.production) : gulp.dest(config.destination.development));
+      .pipe(gulp.dest($.env.production ? config.destination.production : config.destination.development));
   });
 };
