@@ -1,30 +1,32 @@
 'use strict';
-var gulp = require('gulp'),
-  gutil  = require('gulp-util'),
-  wizard = require('./utils/c.wizard'),
-  eslint = require('gulp-eslint'),
-
-  // Default config
-  defaults     = {
-    location    : './src/js/**/*.js',
-    eslint : {
-      failAfterError : false
-    }
-  };
 
 /**
  * Creates a ESlint task.
  * @param {String} [id=clean] Id of a task
  * @param {Object} [config={}] Task config
- * @return {Function}
  */
 module.exports = function (id, config) {
-  var wizard = require('./utils/c.wizard')(id, 'eslint', config, defaults);
+  // Default config
+  let defaultId = 'eslint';
+  let defaults = {
+    location: './src/js/**/*.js',
+    eslint: {
+      failAfterError: false
+    }
+  };
 
-  id     = wizard.getId();
+  // Init task with cradle wizard
+  let wizard = require('./utils/c.wizard')(id, defaultId, config, defaults);
+
+  // Task dependencies
+  let gulp = require('gulp');
+  let gutil = require('gulp-util');
+  let eslint = require('gulp-eslint');
+
+  // Final task config
   config = wizard.getConfig();
 
-  gulp.task(id, function () {
+  gulp.task(wizard.getId(), function () {
     return gulp.src(config.location)
       .pipe(eslint(config.eslint))
       .pipe(eslint.format())
