@@ -18,7 +18,7 @@
     ],
     "linebreak-style": [
       "error",
-      "unix"
+      "windows"
     ],
     "quotes": [
       "error",
@@ -28,6 +28,12 @@
       "error",
       "always"
     ],
+    "one-var": ["warn", {
+      "let": "never"
+    }],
+    "max-len": ["warn", {
+      "code": 80
+    }],
     "space-before-function-paren": ["error", {
       "anonymous": "always",
       "named": "never",
