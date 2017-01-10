@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Image processor task. Relocate and minimise images
+ * Image processor task. Relocate + imagemin.
  * @param {String} [id=clean] Id of a task
  * @param {Object} [config={}] Task config
  */
