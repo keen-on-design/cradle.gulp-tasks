@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Creates a bundler task
+ * Browserify vendors bundle task.
  * @param {String} [id=js:bundle] Id of a task
  * @param {Object} [config={}] Task config
  */
