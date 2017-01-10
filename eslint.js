@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Creates a ESlint task.
+ * ESlint task.
  * @param {String} [id=clean] Id of a task
  * @param {Object} [config={}] Task config
  */
