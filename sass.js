@@ -45,6 +45,7 @@ module.exports = function (id, config) {
       .pipe(autoprefixer(config.autoprefixer))
       .pipe($.env.production ? rename({suffix: '.min'}) : gutil.noop())
       .pipe($.env.production ? gutil.noop() : sourcemaps.write())
-      .pipe($.env.production ? gulp.dest(config.destination.production) : gulp.dest(config.destination.development));
+      .pipe($.env.production ? gulp.dest(config.destination.production) : gulp.dest(config.destination.development))
+      .pipe($.browserSync.stream());
   });
 };
