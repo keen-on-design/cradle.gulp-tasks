@@ -41,7 +41,8 @@ module.exports = function (id, config) {
   gulp.task(wizard.getId(), function () {
     let bundler = browserify(_.extend({
       entries: config.entryPoint,
-      debug: $.env.debug
+      debug: $.env.debug,
+      transform: config.transform,
     }, config.browserify));
 
     _.each(config.vendors, function (vendor) {
