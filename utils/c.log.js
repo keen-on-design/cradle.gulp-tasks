@@ -1,36 +1,36 @@
 'use strict';
 
-var gutil      = require('gulp-util'),
-  _            = require('underscore');
-
 module.exports = function (message) {
-  var messagePrefix = gutil.colors.blue('CRADLE >');
+  let gutil = require('gulp-util');
+  let _ = require('underscore');
+  let messagePrefix = gutil.colors.blue('CRADLE >');
+
   if (_.isArray(message)) {
-    var output = [];
+    let output = [];
 
     // Building message
     _.each(message, function (entry) {
       if (_.isObject(entry) && entry.trace !== undefined) {
         switch (entry.type) {
-          case 'id' :
-            output.push("'" + gutil.colors.cyan(entry.trace) + "'");
-            break;
+        case 'id':
+          output.push('\'' + gutil.colors.cyan(entry.trace) + '\'');
+          break;
 
-          case 'warning' :
-            output.push(gutil.colors.yellow('WARNING: ' + entry.trace));
-            break;
+        case 'warning':
+          output.push(gutil.colors.yellow('WARNING: ' + entry.trace));
+          break;
 
-          case 'success' :
-            output.push(gutil.colors.green(entry.trace));
-            break;
+        case 'success':
+          output.push(gutil.colors.green(entry.trace));
+          break;
 
-          case 'object' :
-            output.push(gutil.colors.grey(JSON.stringify(entry.trace)));
-            break;
+        case 'object':
+          output.push(gutil.colors.grey(JSON.stringify(entry.trace)));
+          break;
 
-          default:
-            output.push(entry.trace);
-            break;
+        default:
+          output.push(entry.trace);
+          break;
         }
       } else {
         output.push(entry);

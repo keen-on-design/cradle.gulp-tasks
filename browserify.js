@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Creates a browserify task
+ * Browserify + uglify task.
  * @param {String} [id=js:scripts] Id of a task
  * @param {Object} [config={}] Task config
  */

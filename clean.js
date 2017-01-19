@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Creates a directory cleaner task
+ * Directory cleaner task.
  * @param {String} [id=clean] Id of a task
  * @param {Object} [config={}] Task config
  */
