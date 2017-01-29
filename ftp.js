@@ -7,8 +7,8 @@
  */
 module.exports = function (id, config) {
   // Default config
-  let defaultId = 'ftp';
-  let defaults = {
+  const defaultId = 'ftp';
+  const defaults = {
     destination: '/public_html/',
 
     files: [
@@ -36,17 +36,17 @@ module.exports = function (id, config) {
   };
 
   // Init task with cradle wizard
-  let wizard = require('./utils/c.wizard')(id, defaultId, config, defaults);
+  const wizard = require('./utils/c.wizard')(id, defaultId, config, defaults);
 
   // Task dependencies
-  let gulp = require('gulp');
-  let ftp = require('vinyl-ftp');
+  const gulp = require('gulp');
+  const ftp = require('vinyl-ftp');
 
   // Final task config
   config = wizard.getConfig();
 
   gulp.task(wizard.getId(), function () {
-    let conn = ftp.create(config.connect);
+    const conn = ftp.create(config.connect);
     return gulp.src(config.files, config.ftp)
       .pipe(conn.newerOrDifferentSize(config.destination))
       .pipe(conn.dest(config.destination));

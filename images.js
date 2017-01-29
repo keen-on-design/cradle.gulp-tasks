@@ -7,8 +7,8 @@
  */
 module.exports = function (id, config) {
   // Default config
-  let defaultId = 'images';
-  let defaults = {
+  const defaultId = 'images';
+  const defaults = {
     location: './src/images/**/*',
     destination: {
       production: './build/images',
@@ -22,13 +22,13 @@ module.exports = function (id, config) {
   };
 
   // Init task with cradle wizard
-  let wizard = require('./utils/c.wizard')(id, defaultId, config, defaults);
+  const wizard = require('./utils/c.wizard')(id, defaultId, config, defaults);
 
   // Task dependencies
-  let gulp = require('gulp');
-  let gutil = require('gulp-util');
-  let cache = require('gulp-cache');
-  let imagemin = require('gulp-imagemin');
+  const gulp = require('gulp');
+  const gutil = require('gulp-util');
+  const cache = require('gulp-cache');
+  const imagemin = require('gulp-imagemin');
 
   // Final task config
   config = wizard.getConfig();

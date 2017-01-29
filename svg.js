@@ -7,8 +7,8 @@
  */
 module.exports = function (id, config) {
   // Default config
-  let defaultId = 'svg:sprite';
-  let defaults = {
+  const defaultId = 'svg:sprite';
+  const defaults = {
     location: './src/svg/**/*.svg',
     destination: {
       production: './build/svg',
@@ -35,15 +35,15 @@ module.exports = function (id, config) {
   };
 
   // Init task with cradle wizard
-  let wizard = require('./utils/c.wizard')(id, defaultId, config, defaults);
+  const wizard = require('./utils/c.wizard')(id, defaultId, config, defaults);
 
   // Task dependencies
-  let gulp = require('gulp');
-  let gutil = require('gulp-util');
-  let svgmin = require('gulp-svgmin');
-  let cheerio = require('gulp-cheerio');
-  let svgSprite = require('gulp-svg-sprite');
-  let replace = require('gulp-replace');
+  const gulp = require('gulp');
+  const gutil = require('gulp-util');
+  const svgmin = require('gulp-svgmin');
+  const cheerio = require('gulp-cheerio');
+  const svgSprite = require('gulp-svg-sprite');
+  const replace = require('gulp-replace');
 
   // Final task config
   config = wizard.getConfig();

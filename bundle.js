@@ -7,8 +7,8 @@
  */
 module.exports = function (id, config) {
   // Default config
-  let defaultId = 'js:bundle';
-  let defaults = {
+  const defaultId = 'js:bundle';
+  const defaults = {
     entryPoint: './src/js/app.js',
     destination: {
       production: './build/js',
@@ -21,25 +21,24 @@ module.exports = function (id, config) {
   };
 
   // Init task with cradle wizard
-  let wizard = require('./utils/c.wizard')(id, defaultId, config, defaults);
+  const wizard = require('./utils/c.wizard')(id, defaultId, config, defaults);
 
   // Task dependencies
-  let gulp = require('gulp');
-  let gutil = require('gulp-util');
-  let rename = require('gulp-rename');
-  let browserify = require('browserify');
-  let uglify = require('gulp-uglify');
-  let source = require('vinyl-source-stream');
-  let buffer = require('vinyl-buffer');
-  let plumber = require('gulp-plumber');
-  let sourcemaps = require('gulp-sourcemaps');
-  let _ = require('underscore');
+  const gulp = require('gulp');
+  const gutil = require('gulp-util');
+  const browserify = require('browserify');
+  const uglify = require('gulp-uglify');
+  const source = require('vinyl-source-stream');
+  const buffer = require('vinyl-buffer');
+  const plumber = require('gulp-plumber');
+  const sourcemaps = require('gulp-sourcemaps');
+  const _ = require('underscore');
 
   // Final task config
   config = wizard.getConfig();
 
   gulp.task(wizard.getId(), function () {
-    let bundler = browserify(_.extend({debug: $.env.debug}, config.browserify));
+    const bundler = browserify(_.extend({debug: $.env.debug}, config.browserify));
 
     _.each(config.vendors, function (vendor) {
       bundler.require(vendor);
@@ -51,7 +50,6 @@ module.exports = function (id, config) {
       .pipe(buffer())
       .pipe($.env.production ? gutil.noop() : sourcemaps.init(config.sourcemaps))
       .pipe($.env.production ? uglify() : gutil.noop())
-      .pipe($.env.production ? rename({suffix: '.min'}) : gutil.noop())
       .pipe($.env.production ? gutil.noop() : sourcemaps.write('./'))
       .pipe(gulp.dest($.env.production ? config.destination.production : config.destination.development));
   });
