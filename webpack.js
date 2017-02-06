@@ -26,7 +26,16 @@ module.exports = function (id, config) {
   // Final task config
   config = wizard.getConfig();
 
-  gulp.task(wizard.getId(), function () {
+  gulp.task(wizard.getId(), function (callback) {
+
+    /*webpack(config, function(err, stats) {
+      if(err) throw new gutil.PluginError("webpack", err);
+      gutil.log("[webpack]", stats.toString({
+        colors: true
+      }));
+      callback();
+    });*/
+
     return gulp.src(_.toArray(config.entry))
       .pipe(webpackStream(config, webpack))
       .pipe(gulp.dest('./build/'))
