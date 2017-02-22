@@ -26,12 +26,12 @@ module.exports = function (id, config) {
   // Final task config
   config = wizard.getConfig();
 
-  gulp.task(wizard.getId(), function () {
-    return gulp.src(_.toArray(config.entry))
-      .pipe(webpackStream(config, webpack))
-      .on('error', function handleError() {
-        this.emit('end'); // Recover from errors
-      })
-      .pipe(gulp.dest('./build/'))
+  gulp.task(wizard.getId(), function (callback) {
+    webpack(config, function(err, stats) {
+      if(err) throw new gutil.PluginError("webpack", err);
+      gutil.log("[webpack]", stats.toString({
+      }));
+      callback();
+    });
   });
 };
