@@ -18,7 +18,6 @@ module.exports = function (id, config) {
 
   // Task dependencies
   const gulp = require('gulp');
-  const copy = require('copy');
 
   // Final task config
   config = wizard.getConfig();
