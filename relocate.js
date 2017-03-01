@@ -9,11 +9,8 @@ module.exports = function (id, config) {
   // Default config
   const defaultId = 'relocate';
   const defaults = {
-    location: './src/dummy/**/*.',
-    destination: {
-      production: './build/dummy',
-      development: './build/dummy'
-    }
+    location: './build/**/*.*',
+    destination: './public/'
   };
 
   // Init task with cradle wizard
@@ -21,12 +18,13 @@ module.exports = function (id, config) {
 
   // Task dependencies
   const gulp = require('gulp');
+  const copy = require('copy');
 
   // Final task config
   config = wizard.getConfig();
 
   gulp.task(wizard.getId(), function () {
     return gulp.src(config.location)
-      .pipe($.env.production ? gulp.dest(config.destination.production) : gulp.dest(config.destination.development));
+      .pipe(gulp.dest(config.destination));
   });
 };
