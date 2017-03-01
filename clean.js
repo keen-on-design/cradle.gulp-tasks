@@ -23,6 +23,8 @@ module.exports = function (id, config) {
   config = wizard.getConfig();
 
   gulp.task(wizard.getId(), function (cb) {
-    return del([config.destination], cb);
+    return del([config.destination], {
+      force: $.env.force
+    }, cb);
   });
 };
