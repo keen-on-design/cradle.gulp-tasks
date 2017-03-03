@@ -7,7 +7,7 @@
  */
 module.exports = function (id, config) {
   // Default config
-  const defaultId = 'ftp';
+  const defaultId = 'ftp-deploy';
   const defaults = {
     destination: '/public_html/',
 
