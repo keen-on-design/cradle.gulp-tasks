@@ -53,9 +53,9 @@ module.exports = function (id, config) {
       // minify svg
       .pipe($.env.production ? svgmin(config.svgmin) : gutil.noop())
       // remove all fill and style declarations in out shapes
-      .pipe(cheerio(config.cheerio))
+      //.pipe(cheerio(config.cheerio))
       // cheerio plugin create unnecessary string '>', so replace it.
-      .pipe(replace('&gt;', '>'))
+      //.pipe(replace('&gt;', '>'))
       // build svg sprite
       .pipe(svgSprite(config.svgSprite))
       .pipe($.env.production ? gulp.dest(config.destination.production) : gulp.dest(config.destination.development));
